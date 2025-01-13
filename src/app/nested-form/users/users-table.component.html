@@ -1,0 +1,36 @@
+<div class="table-container">
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Street</th>
+        <th>City</th>
+        <th>Postal Code</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.street}}</td>
+        <td>{{user.city}}</td>
+        <td>{{user.postalCode}}</td>
+        <td class="actions">
+          <button class="icon-button edit" (click)="onEdit(user)"
+            title="Edit user">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="icon-button delete" (click)="onDelete(user)"
+            title="Delete user">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="no-data" *ngIf="!users || users.length === 0">
+    No users found
+  </div>
+</div>

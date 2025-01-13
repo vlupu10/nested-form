@@ -1,0 +1,103 @@
+.table-container {
+  margin: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background-color: #f5f5f5;
+      font-weight: 600;
+      color: #333;
+      text-transform: uppercase;
+      font-size: 0.9em;
+    }
+
+    tr {
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      td {
+        color: #666;
+        font-size: 0.95em;
+      }
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+  }
+}
+
+// Responsive styles
+@media screen and (max-width: 768px) {
+  .table-container {
+    margin: 10px;
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .users-table {
+    th, td {
+      padding: 8px 10px;
+      font-size: 0.9em;
+    }
+  }
+}
+
+.actions {
+  white-space: nowrap;
+  width: 100px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin: 0 4px;
+
+  &.edit {
+    color: #4a90e2;
+    &:hover {
+      background-color: rgba(74, 144, 226, 0.1);
+    }
+  }
+
+  &.delete {
+    color: #dc3545;
+    &:hover {
+      background-color: rgba(220, 53, 69, 0.1);
+    }
+  }
+
+  i {
+    font-size: 1.1rem;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

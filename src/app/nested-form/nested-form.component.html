@@ -1,0 +1,58 @@
+<div class="form-container">
+  <h2>Edit Users</h2>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form-section">
+    <div class="form-field">
+      <span>Id: {{ userData!.id }}</span>
+    </div>
+    <div class="form-field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" formControlName="name">
+      <div class="error-message"
+        *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+        <span *ngIf="name?.errors?.['required']">Name is required.</span>
+      </div>
+    </div>
+    <h3>Address</h3>
+
+    <div class="form-field">
+      <label for="street">Street:</label>
+      <input type="text" id="street" formControlName="street">
+      <div class="error-message"
+        *ngIf="street?.invalid && (street?.dirty || street?.touched)">
+        <span *ngIf="street?.errors?.['required']">Street is required.</span>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="city">City:</label>
+      <input type="text" id="city" formControlName="city">
+      <div class="error-message"
+        *ngIf="city?.invalid && (city?.dirty || city?.touched)">
+        <span *ngIf="city?.errors?.['required']">City is required.</span>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="postalCode">Postal Code:</label>
+      <input type="text" id="postalCode" formControlName="postalCode">
+      <div class="error-message"
+        *ngIf="postalCode?.invalid && (postalCode?.dirty || postalCode?.touched)">
+        <span *ngIf="postalCode?.errors?.['required']">Postal Code is
+          required.</span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="!userForm.valid">Submit</button>
+    </div>
+  </form>
+  <br>
+  <div class="users-section">
+    <h2>Users List</h2>
+    <app-users-table
+      [users]="usersData"
+      (editUser)="handleEdit($event)"
+      (deleteUser)="handleDelete($event)">
+    </app-users-table>
+  </div>
+</div>
