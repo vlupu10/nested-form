@@ -91,4 +91,42 @@ describe('UsersTableComponent', () => {
       expect(component.getSortIcon('name')).toBe('↕️');
     });
   });
+
+  describe('pagination', () => {
+    beforeEach(() => {
+      component.users = Array(12).fill(null).map((_, index) => ({
+        id: index + 1,
+        name: `User ${index + 1}`,
+        street: `Street ${index + 1}`,
+        city: `City ${index + 1}`,
+        postalCode: `${10000 + index}`
+      }));
+      component.pageSize = 5;
+      fixture.detectChanges();
+    });
+
+    it('should initialize with first page', () => {
+      expect(component.currentPage).toBe(1);
+      expect(component.paginatedUsers.length).toBe(5);
+      expect(component.paginatedUsers[0].id).toBe(1);
+    });
+
+    it('should calculate total pages correctly', () => {
+      expect(component.totalPages).toBe(3);
+    });
+
+    it('should change page', () => {
+      component.onPageChange(2);
+      expect(component.currentPage).toBe(2);
+      expect(component.paginatedUsers[0].id).toBe(6);
+    });
+
+    it('should not change page beyond bounds', () => {
+      component.onPageChange(0);
+      expect(component.currentPage).toBe(1);
+
+      component.onPageChange(4);
+      expect(component.currentPage).toBe(1);
+    });
+  });
 });

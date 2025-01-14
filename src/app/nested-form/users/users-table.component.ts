@@ -18,6 +18,25 @@ export class UsersTableComponent {
   sortColumn: SortColumn | null = null;
   sortDirection: SortDirection = 'none';
 
+  // Pagination properties
+  pageSize = 5;
+  currentPage = 1;
+
+  get paginatedUsers(): UserData[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.users.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.users.length / this.pageSize);
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
   onEdit(user: UserData): void {
     this.editUser.emit(user);
   }
