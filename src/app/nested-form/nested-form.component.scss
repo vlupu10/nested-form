@@ -1,5 +1,5 @@
 .form-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 2rem auto;
   padding: 2rem;
   background: white;
@@ -20,6 +20,7 @@
   .form-field {
     margin-bottom: 1.5rem;
     position: relative;
+    padding-right: 25px;
 
     label {
       display: block;

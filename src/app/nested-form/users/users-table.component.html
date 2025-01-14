@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users">
+      <tr *ngFor="let user of paginatedUsers">
         <td>{{user.id}}</td>
         <td>{{user.name}}</td>
         <td>{{user.street}}</td>
@@ -40,6 +40,27 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="users.length > pageSize">
+    <button
+      [disabled]="currentPage === 1"
+      (click)="onPageChange(currentPage - 1)"
+      class="page-button">
+      Previous
+    </button>
+
+    <span class="page-info">
+      Page {{ currentPage }} of {{ totalPages }}
+    </span>
+
+    <button
+      [disabled]="currentPage === totalPages"
+      (click)="onPageChange(currentPage + 1)"
+      class="page-button">
+      Next
+    </button>
+  </div>
+
   <div class="no-data" *ngIf="!users || users.length === 0">
     No users found
   </div>
