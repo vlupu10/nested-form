@@ -1,51 +1,113 @@
 <div class="form-container">
-  <h2>Edit Users</h2>
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form-section">
-    <div class="form-field">
-      <span>Id: {{ userData!.id }}</span>
-    </div>
-    <div class="form-field">
-      <label for="name">Name:</label>
-      <input type="text" id="name" formControlName="name">
-      <div class="error-message"
-        *ngIf="name?.invalid && (name?.dirty || name?.touched)">
-        <span *ngIf="name?.errors?.['required']">Name is required.</span>
-      </div>
-    </div>
-    <h3>Address</h3>
+  <div class="tabs">
+    <button [class.active]="activeTab === 'edit'"
+      (click)="activeTab = 'edit'">Edit Users</button>
+    <button [class.active]="activeTab === 'add'" (click)="activeTab = 'add'">Add
+      Users</button>
+  </div>
 
-    <div class="form-field">
-      <label for="street">Street:</label>
-      <input type="text" id="street" formControlName="street">
-      <div class="error-message"
-        *ngIf="street?.invalid && (street?.dirty || street?.touched)">
-        <span *ngIf="street?.errors?.['required']">Street is required.</span>
+  <!-- Edit Users Tab -->
+  <div *ngIf="activeTab === 'edit'" class="tab-content">
+    <div *ngIf="!selectedUser" class="select-user-message">
+      Please select a user to edit.
+    </div>
+    <form [formGroup]="editForm" (ngSubmit)="onEditSubmit()"
+      class="form-section">
+      <!-- <div class="form-field">
+        <span>Id: {{ selectedUser?.id }}</span>
+      </div> -->
+      <div class="form-field">
+        <label for="editName">Name:</label>
+        <input type="text" id="editName" formControlName="name"
+          [disabled]="!selectedUser">
+        <div class="error-message"
+          *ngIf="editForm.get('name')?.invalid && (editForm.get('name')?.dirty || editForm.get('name')?.touched)">
+          <span *ngIf="editForm.get('name')?.errors?.['required']">Name is
+            required.</span>
+        </div>
       </div>
-    </div>
-
-    <div class="form-field">
-      <label for="city">City:</label>
-      <input type="text" id="city" formControlName="city">
-      <div class="error-message"
-        *ngIf="city?.invalid && (city?.dirty || city?.touched)">
-        <span *ngIf="city?.errors?.['required']">City is required.</span>
+      <div class="form-field">
+        <label for="editStreet">Street:</label>
+        <input type="text" id="editStreet" formControlName="street"
+          [disabled]="!selectedUser">
+        <div class="error-message"
+          *ngIf="editForm.get('street')?.invalid && (editForm.get('street')?.dirty || editForm.get('street')?.touched)">
+          <span *ngIf="editForm.get('street')?.errors?.['required']">Street is
+            required.</span>
+        </div>
       </div>
-    </div>
-
-    <div class="form-field">
-      <label for="postalCode">Postal Code:</label>
-      <input type="text" id="postalCode" formControlName="postalCode">
-      <div class="error-message"
-        *ngIf="postalCode?.invalid && (postalCode?.dirty || postalCode?.touched)">
-        <span *ngIf="postalCode?.errors?.['required']">Postal Code is
-          required.</span>
+      <div class="form-field">
+        <label for="editCity">City:</label>
+        <input type="text" id="editCity" formControlName="city"
+          [disabled]="!selectedUser">
+        <div class="error-message"
+          *ngIf="editForm.get('city')?.invalid && (editForm.get('city')?.dirty || editForm.get('city')?.touched)">
+          <span *ngIf="editForm.get('city')?.errors?.['required']">City is
+            required.</span>
+        </div>
       </div>
-    </div>
+      <div class="form-field">
+        <label for="editPostalCode">Postal Code:</label>
+        <input type="text" id="editPostalCode" formControlName="postalCode"
+          [disabled]="!selectedUser">
+        <div class="error-message"
+          *ngIf="editForm.get('postalCode')?.invalid && (editForm.get('postalCode')?.dirty || editForm.get('postalCode')?.touched)">
+          <span *ngIf="editForm.get('postalCode')?.errors?.['required']">Postal
+            Code is required.</span>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit"
+          [disabled]="!editForm.valid || !selectedUser">Update User</button>
+      </div>
+    </form>
+  </div>
 
-    <div class="form-actions">
-      <button type="submit" [disabled]="!userForm.valid">Submit</button>
-    </div>
-  </form>
+  <!-- Add Users Tab -->
+  <div *ngIf="activeTab === 'add'" class="tab-content">
+    <form [formGroup]="addForm" (ngSubmit)="onAddSubmit()" class="form-section">
+      <div class="form-field">
+        <label for="addName">Name:</label>
+        <input type="text" id="addName" formControlName="name">
+        <div class="error-message"
+          *ngIf="addForm.get('name')?.invalid && (addForm.get('name')?.dirty || addForm.get('name')?.touched)">
+          <span *ngIf="addForm.get('name')?.errors?.['required']">Name is
+            required.</span>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="addStreet">Street:</label>
+        <input type="text" id="addStreet" formControlName="street">
+        <div class="error-message"
+          *ngIf="addForm.get('street')?.invalid && (addForm.get('street')?.dirty || addForm.get('street')?.touched)">
+          <span *ngIf="addForm.get('street')?.errors?.['required']">Street is
+            required.</span>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="addCity">City:</label>
+        <input type="text" id="addCity" formControlName="city">
+        <div class="error-message"
+          *ngIf="addForm.get('city')?.invalid && (addForm.get('city')?.dirty || addForm.get('city')?.touched)">
+          <span *ngIf="addForm.get('city')?.errors?.['required']">City is
+            required.</span>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="addPostalCode">Postal Code:</label>
+        <input type="text" id="addPostalCode" formControlName="postalCode">
+        <div class="error-message"
+          *ngIf="addForm.get('postalCode')?.invalid && (addForm.get('postalCode')?.dirty || addForm.get('postalCode')?.touched)">
+          <span *ngIf="addForm.get('postalCode')?.errors?.['required']">Postal
+            Code is required.</span>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" [disabled]="!addForm.valid">Add User</button>
+      </div>
+    </form>
+  </div>
+
   <br>
   <div class="users-section">
     <h2>Users List</h2>

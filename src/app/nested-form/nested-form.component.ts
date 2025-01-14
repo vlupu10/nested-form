@@ -10,10 +10,11 @@ import { UserData } from '../data.service'; // Import UserData interface
   styleUrls: ['./nested-form.component.scss']
 })
 export class NestedFormComponent implements OnInit {
-  userForm!: FormGroup;
-  userData: UserData | null = null;
+  editForm!: FormGroup;
+  addForm!: FormGroup;
+  selectedUser: UserData | null = null;
   usersData: UserData[] = [];
-  ready = false;
+  activeTab: 'edit' | 'add' = 'edit';
 
   constructor(
     private fb: FormBuilder,
@@ -21,83 +22,60 @@ export class NestedFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userData = {
-      id: 0,
-      name: '',
-      city: '',
-      street: '',
-      postalCode: ''
-    };
-    this.userForm = this.fb.group({
+    this.initializeForms();
+    this.loadData();
+  }
+
+  private initializeForms() {
+    this.editForm = this.fb.group({
       name: ['', Validators.required],
       street: ['', Validators.required],
       city: ['', Validators.required],
       postalCode: ['', Validators.required],
     });
-    this.dataService.getData().subscribe({
-      next: (data) => {
-        if (data.length > 0) {
-          this.usersData = data;
-          this.userData = data[0];
-          this.ready = true;
-          this.userForm = this.fb.group({
-            name: [this.userData?.name, Validators.required],
-            street: [this.userData?.street, Validators.required],
-            city: [this.userData?.city, Validators.required],
-            postalCode: [this.userData?.postalCode, Validators.required],
-          });
-        } else {
-          this.userForm = this.fb.group({
-            name: ['', Validators.required],
-            street: [this.userData?.street, Validators.required],
-            city: [this.userData?.city, Validators.required],
-            postalCode: [this.userData?.postalCode, Validators.required],
-          });
-        }
-      },
-      error: (error) => {
-        // Handle error gracefully (e.g., display an error message to the user)
-        this.userForm = this.fb.group({
-          name: ['', Validators.required],
-          street: ['', Validators.required],
-          city: ['', Validators.required],
-          postalCode: ['', Validators.required],
-        });
-      }
+
+    this.addForm = this.fb.group({
+      name: ['', Validators.required],
+      street: ['', Validators.required],
+      city: ['', Validators.required],
+      postalCode: ['', Validators.required],
     });
   }
 
-  get name() {
-    return this.userForm.get('name');
-  }
-
-  get street() {
-    return this.userForm.get('street');
-  }
-  get city() {
-    return this.userForm.get('city');
-  }
-  get postalCode() {
-    return this.userForm.get('postalCode');
-  }
-
-  onSubmit() {
-    if (this.userForm.valid) {
+  onEditSubmit() {
+    if (this.editForm.valid && this.selectedUser) {
       const userData: UserData = {
-        id: this.userData?.id ?? 0,
-        name: this.userForm.value.name,
-        street: this.userForm.value.street,
-        city: this.userForm.value.city,
-        postalCode: this.userForm.value.postalCode
+        id: this.selectedUser.id,
+        ...this.editForm.value
+      };
+
+      this.dataService.updateUser(userData).subscribe({
+        next: () => {
+          this.loadData();
+          this.editForm.reset();
+          this.selectedUser = null;
+        },
+        error: (error) => {
+          console.error('Error updating user:', error);
+        }
+      });
+    }
+  }
+
+  onAddSubmit() {
+    if (this.addForm.valid) {
+      const userData: UserData = {
+        id: 0, // This will be set by the server
+        ...this.addForm.value
       };
 
       this.dataService.insertUser(userData).subscribe({
-        next: (response) => {
-          // Refresh the data after successful insertion
-          this.loadData(); // Method to fetch updated data
+        next: () => {
+          this.loadData();
+          this.addForm.reset();
         },
         error: (error) => {
-          console.error('Error:', error);
+          console.error('Error adding user:', error);
         }
       });
     }
@@ -115,13 +93,14 @@ export class NestedFormComponent implements OnInit {
   }
 
   handleEdit(user: UserData): void {
-    this.userData = user;
-    this.userForm.patchValue({
+    this.selectedUser = user;
+    this.editForm.patchValue({
       name: user.name,
       street: user.street,
       city: user.city,
       postalCode: user.postalCode
     });
+    this.activeTab = 'edit';
   }
 
   handleDelete(user: UserData): void {

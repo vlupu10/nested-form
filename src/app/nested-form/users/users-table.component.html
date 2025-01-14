@@ -2,11 +2,21 @@
   <table class="users-table">
     <thead>
       <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Street</th>
-        <th>City</th>
-        <th>Postal Code</th>
+        <th (click)="sort('id')">
+          ID {{ getSortIcon('id') }}
+        </th>
+        <th (click)="sort('name')">
+          Name {{ getSortIcon('name') }}
+        </th>
+        <th (click)="sort('street')">
+          Street {{ getSortIcon('street') }}
+        </th>
+        <th (click)="sort('city')">
+          City {{ getSortIcon('city') }}
+        </th>
+        <th (click)="sort('postalCode')">
+          Postal Code {{ getSortIcon('postalCode') }}
+        </th>
         <th>Actions</th>
       </tr>
     </thead>
